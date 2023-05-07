@@ -1,6 +1,6 @@
 import express, {Express} from 'express';
 import UrlShortenerPresentation from './presentation/shortener';
-import connectToMongo from './database-connection';
+import {redisClient, connectToMongo} from './database-connection';
 
 
 const start = async () => {
@@ -12,6 +12,8 @@ const start = async () => {
 
 
     await connectToMongo();
+    await redisClient.connect();
+    console.log('Redis connected');
     app.listen(8001, () => {
         console.log('Sever is Up in port 8001');
     });
