@@ -17,3 +17,5 @@ class UrlShortnerApplication {
         return {shortUrl}
     }
 }
+
+export default UrlShortnerApplication;
