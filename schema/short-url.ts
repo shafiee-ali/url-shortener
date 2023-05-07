@@ -1,8 +1,8 @@
 import {Schema} from 'mongoose';
 
-const ShortUrl = new Schema({
+const ShortUrlSchema = new Schema({
     url: String,
     shortUrl: String,
 })
 
-export default ShortUrl;
+export default ShortUrlSchema;
