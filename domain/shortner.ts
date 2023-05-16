@@ -1,13 +1,13 @@
-type ShortUrlInput = {
-    url: string
+type LongUrlType = {
+    longUrl: string
 };
 
-type ShortUrlOutput = {
+type ShortUrlType = {
     shortUrl: string
 };
 
 export {
-    ShortUrlInput,
-    ShortUrlOutput,
+    LongUrlType,
+    ShortUrlType,
 };
 

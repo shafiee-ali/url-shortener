@@ -8,7 +8,8 @@ const start = async () => {
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    app.post('/short', UrlShortenerPresentation.shortenerPostApi)
+    app.post('/shorten', UrlShortenerPresentation.shortenUrl)
+    app.get('/:shortUrl', UrlShortenerPresentation.getLongUrl)
 
 
     await connectToMongo();
