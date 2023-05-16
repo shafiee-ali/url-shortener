@@ -8,6 +8,10 @@ class UrlShortnerApplication {
     {
         return url;
     }
+    private static generateUniqueId(url: string): string
+    {
+        return url;
+    }
     public static async shortingUrl(input: LongUrlType): Promise<ShortUrlType> 
     {
         
