@@ -1,12 +1,13 @@
 import { LongUrlType, ShortUrlType } from "../domain/shortner";
 import ShortUrlDataAccess from "../data-access/shortener";
 import { redisClient } from "../database-connection";
+import { generate } from 'shortid';
 
 
 class UrlShortnerApplication {
-    private static shortingUrlAlgorith(url: string): string
+    private static shortingUrlAlgorith(): string
     {
-        return url;
+        return generate();
     }
     private static generateUniqueId(url: string): string
     {
@@ -24,7 +25,7 @@ class UrlShortnerApplication {
         shortUrl = await ShortUrlDataAccess.findByLongUrl(input.longUrl)
         if (!shortUrl) {
             console.log('Short url not exist in database');
-            shortUrl = this.shortingUrlAlgorith(input.longUrl);
+            shortUrl = this.shortingUrlAlgorith();
             await ShortUrlDataAccess.insert(input.longUrl, shortUrl);
         }
         console.log('Short url exists in database but not cached');

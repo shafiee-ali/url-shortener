@@ -11,7 +11,7 @@ class ShortUrlDataAccess {
         const result = await ShortUrlModel.findOne({shortUrl});
         return result?.longurl;
     }
-    public static async insert(id: string, url: string, shortUrl: string) {
+    public static async insert(url: string, shortUrl: string) {
         await ShortUrlModel.create({url, shortUrl});
     }
 }
