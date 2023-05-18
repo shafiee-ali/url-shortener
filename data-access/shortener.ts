@@ -9,7 +9,7 @@ class ShortUrlDataAccess {
 
     public static async findByShortUrl(shortUrl: string): Promise<string | undefined> {
         const result = await ShortUrlModel.findOne({shortUrl});
-        return result?.longurl;
+        return result?.longUrl;
     }
     public static async insert(longUrl: string, shortUrl: string) {
         await ShortUrlModel.create({longUrl, shortUrl});

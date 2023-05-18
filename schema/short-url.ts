@@ -1,7 +1,7 @@
 import {Schema} from 'mongoose';
 
 const ShortUrlSchema = new Schema({
-    longurl: String,
+    longUrl: String,
     shortUrl: String,
 })
 
