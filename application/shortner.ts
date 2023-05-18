@@ -33,6 +33,7 @@ class UrlShortnerApplication {
             shortUrl = this.shortingUrlAlgorith();
             console.log(`long url is ${input.longUrl}`);
             await ShortUrlDataAccess.insert(input.longUrl, shortUrl);
+            return {shortUrl: this.BASE_URL + shortUrl}   
         }
         console.log('Short url exists in database but not cached');
         redisClient.set(input.longUrl, shortUrl);
