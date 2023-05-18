@@ -22,6 +22,7 @@ export default class UrlShortenerPresentation {
         });
         const parseResult = queryValidator.safeParse(req.params)
         if (parseResult.success) {
+            console.log(`Short url is ${parseResult.data.shortUrl}`)
             const longUrl = await UrlShortnerApplication.getLongUrl(parseResult.data);
             if (longUrl) {
                 res.redirect(longUrl.longUrl);
