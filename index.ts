@@ -1,6 +1,8 @@
 import express, {Express} from 'express';
 import UrlShortenerPresentation from './presentation/shortener';
 import {redisClient, connectToMongo} from './database-connection';
+import {config} from 'dotenv-flow';
+config();
 
 
 const start = async () => {
@@ -15,8 +17,8 @@ const start = async () => {
     await connectToMongo();
     await redisClient.connect();
     console.log('Redis connected');
-    app.listen(8001, () => {
-        console.log('Sever is Up in port 8001');
+    app.listen(process.env.SERVER_PORT, () => {
+        console.log(`Sever is Up in port ${process.env.SERVER_PORT}`);
     });
 
 }
