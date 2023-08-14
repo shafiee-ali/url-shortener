@@ -17,8 +17,9 @@ const start = async () => {
     await connectToMongo();
     await redisClient.connect();
     console.log('Redis connected');
-    app.listen(process.env.SERVER_PORT, () => {
-        console.log(`Sever is Up in port ${process.env.SERVER_PORT}`);
+    const port = process.env.SERVER_PORT || 8081;
+    app.listen(port, () => {
+        console.log(`Sever is Up in port ${port}`);
     });
 
 }
