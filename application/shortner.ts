@@ -6,35 +6,37 @@ import { Logging } from "../util/logging";
 
 
 class UrlShortnerApplication {
-    private static BASE_URL = `http://localhost:${process.env.SERVER_PORT}/` 
-    private static shortingUrlAlgorith(): string
-    {
+    private static BASE_URL = `http://localhost:${process.env.SERVER_PORT}/`
+    private static shortingUrlAlgorith(): string {
         return generate();
     }
-    private static generateUniqueId(url: string): string
-    {
+    private static generateUniqueId(url: string): string {
         return url;
     }
-    public static async shortingUrl(input: LongUrlType): Promise<ShortUrlType> 
-    {
+
+    public static getFullShortUrl(shortUrl: string) {
+        return { shortUrl: this.BASE_URL + shortUrl };
+    }
+    public static async shortingUrl(input: LongUrlType): Promise<ShortUrlType> {
         let shortUrl: string | null | undefined = await redisClient.get(input.longUrl);
-        if (shortUrl){
-            Logging.logger.trace({longUrl: input.longUrl ,shortUrl}, 'application::shortingUrl::Cache Hit');
-            return {shortUrl: this.BASE_URL + shortUrl}   
+        if (shortUrl) {
+            Logging.logger.trace({ longUrl: input.longUrl, shortUrl }, 'application::shortingUrl::Cache Hit');
+            return this.getFullShortUrl(shortUrl)
         }
-        Logging.logger.trace({longUrl: input.longUrl}, 'application::shortingUrl::Cache Miss');
+        Logging.logger.trace({ longUrl: input.longUrl }, 'application::shortingUrl::Cache Miss');
         shortUrl = await ShortUrlDataAccess.findByLongUrl(input.longUrl)
         if (!shortUrl) {
-            Logging.logger.trace({longUrl: input.longUrl},'application::shortingUrl::Short url not exist in database');
-            Logging.logger.trace({shortUrl}, 'application::shortingUrl::Creating new short url');
+            Logging.logger.trace({ longUrl: input.longUrl }, 'application::shortingUrl::Short url not exist in database');
+            Logging.logger.trace({ shortUrl }, 'application::shortingUrl::Creating new short url');
             shortUrl = this.shortingUrlAlgorith();
-            Logging.logger.trace({longUrl: input.longUrl ,shortUrl}, `application::shortingUrl::Generated Long url`);
+            Logging.logger.trace({ longUrl: input.longUrl, shortUrl }, `application::shortingUrl::Generated Long url`);
+            redisClient.set(input.longUrl, shortUrl);
             await ShortUrlDataAccess.insert(input.longUrl, shortUrl);
-            return {shortUrl: this.BASE_URL + shortUrl}   
+            return { shortUrl: this.BASE_URL + shortUrl }
         }
-        Logging.logger.trace({longUrl: input.longUrl ,shortUrl}, `application::shortingUrl::Short url exists in database but not cached`);
+        Logging.logger.trace({ longUrl: input.longUrl, shortUrl }, `application::shortingUrl::Short url exists in database but not cached`);
         redisClient.set(input.longUrl, shortUrl);
-        return {shortUrl: this.BASE_URL + shortUrl}   
+        return { shortUrl: this.BASE_URL + shortUrl }
 
     }
 
@@ -47,14 +49,14 @@ class UrlShortnerApplication {
         longUrl = await redisClient.get(shortUrlWithoutBaseUrl);
         if (!longUrl) {
             longUrl = await ShortUrlDataAccess.findByShortUrl(shortUrlWithoutBaseUrl);
-            Logging.logger.trace({longUrl, shortUrl: input.shortUrl}, `application::getLongUrl::Long url`);
+            Logging.logger.trace({ longUrl, shortUrl: input.shortUrl }, `application::getLongUrl::Long url`);
             if (!longUrl) {
                 return undefined;
             }
             redisClient.set(longUrl, shortUrlWithoutBaseUrl);
         }
-        if (longUrl){
-            return {longUrl};
+        if (longUrl) {
+            return { longUrl };
         }
         return undefined;
     }
