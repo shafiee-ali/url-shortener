@@ -1,13 +1,15 @@
 import express, {Express} from 'express';
 import UrlShortenerPresentation from './presentation/shortener';
-import {redisClient, connectToMongo} from './database-connection';
+import {connectToRedis, connectToMongo} from './database-connection';
 import {config} from 'dotenv-flow';
+import {Logging} from './util/logging';
 config();
 
 
 const start = async () => {
     const app: Express = express();
-
+    
+    Logging.createLogger();
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.post('/shorten', UrlShortenerPresentation.shortenUrl)
@@ -15,11 +17,10 @@ const start = async () => {
 
 
     await connectToMongo();
-    await redisClient.connect();
-    console.log('Redis connected');
+    await connectToRedis();
     const port = process.env.SERVER_PORT || 8081;
     app.listen(port, () => {
-        console.log(`Sever is Up in port ${port}`);
+        Logging.logger.info(`Sever is Up in port ${port}`);
     });
 
 }
