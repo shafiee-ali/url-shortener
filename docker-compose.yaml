@@ -1,0 +1,24 @@
+services:
+  url-shortener:
+    container_name: url_shortener
+    build: .
+    env_file:
+      - ./.env
+    restart: always
+    ports:
+     - 3001:3001
+    depends_on:
+      - mongo
+      - redis
+  mongo:
+    container_name: mongo_url_shortener
+    image: mongo:6.0.1
+    env_file:
+      - './.env'
+    ports:
+      - 27019:27017
+  redis:
+    container_name: redis_url_shortener
+    image: redis:7.0.4
+    ports:
+      - 6380:6379
