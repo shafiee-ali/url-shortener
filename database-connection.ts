@@ -39,14 +39,15 @@ const connectToRedis = async () => {
     await redisClient.connect().then(_ => {
         Logging.logger.info('Redis connected')
     })
-    return redisClient;
+}
+
+const databaseConnections = async () => {
+    await connectToMongo();
+    await connectToRedis();
 }
 
 
-
-
 export {
-    connectToRedis,
+    databaseConnections,
     redisClient,
-    connectToMongo
 };
