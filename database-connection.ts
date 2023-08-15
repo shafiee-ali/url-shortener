@@ -1,14 +1,14 @@
-import { log } from 'console';
 import * as mongoose from 'mongoose';
 import { RedisClientType, createClient } from 'redis';
+import { Logging } from './util/logging';
 
 const PORT = 8080
 
 
 const connectToMongo = async () => {
-    let dbURI;
+    let MONGO_URL;
     if (process.env.MONGO_USER && process.env.MONGO_PASS) {
-        dbURI =
+        MONGO_URL =
             `mongodb://${process.env.MONGO_USER
             }:${process.env.MONGO_PASS
             }@${process.env.MONGO_HOST
@@ -16,25 +16,37 @@ const connectToMongo = async () => {
             }/${process.env.MONGO_DATABASE
             }`;
     } else {
-        dbURI =
+        MONGO_URL =
             `mongodb://${process.env.MONGO_HOST
             }:${process.env.MONGO_PORT
             }/${process.env.MONGO_DATABASE
             }`;
     }
-    await mongoose.connect(dbURI).then(res => {
-        console.log('Connected to mongodb');
-    })
+    await mongoose.connect(MONGO_URL).then(_ => {
+        Logging.logger.info('Mongodb connected')
+        })
 }
 
-const REDIS_URL = 'redis://localhost:6379'
-const redisClient: RedisClientType = createClient({
-    url: REDIS_URL
-});
+let redisClient: RedisClientType;
+const connectToRedis = async () => {
+    const REDIS_URL = 
+    `redis://${process.env.REDIS_HOST
+    }:${process.env.REDIS_PORT}`;
+
+    redisClient = createClient({
+        url: REDIS_URL
+    });
+    await redisClient.connect().then(_ => {
+        Logging.logger.info('Redis connected')
+    })
+    return redisClient;
+}
+
 
 
 
 export {
+    connectToRedis,
     redisClient,
     connectToMongo
 };
