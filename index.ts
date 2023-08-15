@@ -8,7 +8,7 @@ config();
 
 const start = async () => {
     const app: Express = express();
-    const port = process.env.SERVER_PORT || 8081;
+    const port = process.env.SERVER_PORT || 3001;
 
     Logging.createLogger();
     app.use(express.json());

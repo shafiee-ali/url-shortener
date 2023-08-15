@@ -5,7 +5,7 @@ import { generate } from 'shortid';
 
 
 class UrlShortnerApplication {
-    private static BASE_URL = 'http://localhost:8001/' 
+    private static BASE_URL = `http://localhost:${process.env.SERVER_PORT}/` 
     private static shortingUrlAlgorith(): string
     {
         console.log('1');
