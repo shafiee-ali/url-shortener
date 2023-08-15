@@ -1,4 +1,3 @@
-import { PickResultType } from "@grpc/grpc-js/build/src/picker";
 import ShortUrlModel from "../model/short-url";
 
 class ShortUrlDataAccess {
