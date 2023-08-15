@@ -1,9 +1,12 @@
 FROM node:18-alpine
-COPY ./package.json /root/url-shortener/package.json
-COPY ./package-lock.json /root/url-shortener/package-lock.json
-COPY . .
-
-
+RUN mkdir -p /root/url-shortener
 WORKDIR /root/url-shortener
-RUN yarn install --prod
-CMD ["ts-node", "index.ts"]
+
+COPY ./package.json /root/url-shortener/package.json
+# COPY ./package-lock.json /root/url-shortener/package-lock.json
+RUN npm install
+
+COPY . /root/url-shortener
+
+CMD ["ts-node", "./index.ts"]
+EXPOSE 3000
